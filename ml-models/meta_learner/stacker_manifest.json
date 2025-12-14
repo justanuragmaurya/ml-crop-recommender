@@ -1,0 +1,10 @@
+{
+  "model_name": "stacker",
+  "version": "0.1",
+  "created_at": "2025-12-10T14:59:57.821418Z",
+  "features": [],
+  "metrics": {
+    "accuracy": 0.9908883826879271,
+    "macro_f1": 0.9908993445578812
+  }
+}
