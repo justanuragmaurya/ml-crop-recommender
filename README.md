@@ -31,9 +31,17 @@ project-root/
 │  ├─ train_base_learners.py
 │  ├─ stacking.py
 │  ├─ predict_recommendation.py
-│  └─ app.py  (Streamlit frontend)
+│  └─ app.py  (Streamlit frontend - legacy)
 │
-├─ reports/
+├─ backend/              # FastAPI backend
+│  ├─ main.py
+│  └─ requirements.txt
+│
+├─ frontend/             # React + Vite frontend
+│  ├─ src/
+│  ├─ package.json
+│  └─ ...
+│
 └─ README.md
 ```
 
@@ -69,11 +77,33 @@ python python-code/stacking.py
 
 ## 🌐 Running the Web Application
 
-After training is complete, start the Streamlit app:
+### Option 1: FastAPI + React (Recommended)
+
+**Start the Backend:**
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+Backend runs at http://localhost:8000 (API docs at http://localhost:8000/docs)
+
+**Start the Frontend:**
+```bash
+cd frontend
+npm install
+npm run dev
+```
+Frontend runs at http://localhost:5173
+
+### Option 2: Streamlit (Legacy)
 
 ```bash
 streamlit run python-code/app.py
 ```
+
+---
 
 The web interface allows you to input:
 - **Soil Parameters**: N, P, K, pH
@@ -123,8 +153,10 @@ The system provides:
 
 ## 🔧 Technical Details
 
-- **Framework**: scikit-learn, XGBoost, LightGBM
-- **Frontend**: Streamlit
+- **ML Framework**: scikit-learn, XGBoost, LightGBM
+- **Backend**: FastAPI + Uvicorn
+- **Frontend**: React + Vite + Tailwind CSS
+- **Legacy Frontend**: Streamlit
 - **Cross-validation**: 5-fold stratified
 - **Random seed**: 42 (for reproducibility)
 
