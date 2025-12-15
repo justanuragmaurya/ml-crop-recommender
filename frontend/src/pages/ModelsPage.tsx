@@ -99,140 +99,147 @@ const models = [
 const getCategoryColor = (category: string) => {
   switch (category) {
     case 'Base Classifier':
-      return 'bg-blue-100 text-blue-700';
+      return 'bg-sky-100 text-sky-800 border border-sky-200';
     case 'Meta-Learner':
-      return 'bg-purple-100 text-purple-700';
+      return 'bg-amber-100 text-amber-800 border border-amber-200';
     case 'Forecaster':
-      return 'bg-teal-100 text-teal-700';
+      return 'bg-emerald-100 text-emerald-800 border border-emerald-200';
     default:
-      return 'bg-gray-100 text-gray-700';
+      return 'bg-stone-100 text-stone-700';
   }
 };
 
 export default function ModelsPage() {
   return (
     <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <div className="text-center mb-10">
-          <div className="flex items-center justify-center gap-3 mb-4">
-            <span className="text-5xl">🤖</span>
-            <h1 className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-              Model Architecture
-            </h1>
+      {/* Header */}
+      <div className="text-center mb-12">
+        <h1 className="text-4xl sm:text-5xl font-bold text-stone-800 mb-4">
+          Model Architecture
+        </h1>
+        <p className="text-stone-600 text-lg max-w-2xl mx-auto">
+          Our crop recommendation system uses a stacked ensemble approach with multiple base learners and weather forecasting models.
+        </p>
+      </div>
+
+      {/* Architecture Overview */}
+      <div className="card mb-12 border-t-4 border-t-stone-400">
+        <h2 className="text-xl font-bold text-stone-800 mb-6 flex items-center gap-2">
+          <span className="text-2xl">🏗️</span> Ensemble Architecture
+        </h2>
+        <div className="bg-stone-50 rounded-2xl p-8 border border-stone-100">
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 text-center">
+            <div className="bg-white border-2 border-sky-100 rounded-xl p-6 min-w-[160px] shadow-sm relative">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Stage 1</div>
+              <p className="text-sm text-stone-500 font-medium mb-1">Base Classifiers</p>
+              <p className="text-3xl font-bold text-sky-600 mb-1">4</p>
+              <p className="text-xs text-stone-400 font-mono">RF, XGB, LGB, KNN</p>
+            </div>
+            
+            <div className="hidden md:flex flex-col items-center gap-1 text-stone-300">
+               <span className="text-sm font-medium">Predictions</span>
+               <span className="text-2xl">→</span>
+            </div>
+            
+            <div className="bg-white border-2 border-amber-100 rounded-xl p-6 min-w-[160px] shadow-sm relative">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Stage 2</div>
+              <p className="text-sm text-stone-500 font-medium mb-1">Meta-Learner</p>
+              <p className="text-3xl font-bold text-amber-600 mb-1">1</p>
+              <p className="text-xs text-stone-400 font-mono">XGBoost Stacker</p>
+            </div>
+
+            <div className="hidden md:flex flex-col items-center gap-1 text-stone-300">
+               <span className="text-sm font-medium">Output</span>
+               <span className="text-2xl">→</span>
+            </div>
+
+            <div className="bg-white border-2 border-green-100 rounded-xl p-6 min-w-[160px] shadow-sm relative">
+              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-green-100 text-green-800 text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wide">Result</div>
+              <p className="text-sm text-stone-500 font-medium mb-1">Final Prediction</p>
+              <p className="text-3xl font-bold text-green-600 mb-1">22</p>
+              <p className="text-xs text-stone-400 font-mono">Crop Classes</p>
+            </div>
           </div>
-          <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-            Our crop recommendation system uses a stacked ensemble approach with multiple base learners and weather
-            forecasting models.
-          </p>
-        </div>
 
-        {/* Architecture Overview */}
-        <div className="card mb-8">
-          <h2 className="text-xl font-bold text-gray-800 mb-4 flex items-center gap-2">
-            <span className="text-2xl">🏗️</span> Ensemble Architecture
-          </h2>
-          <div className="bg-gradient-to-r from-gray-50 to-slate-50 rounded-xl p-6">
-            <div className="flex flex-col md:flex-row items-center justify-center gap-4 text-center">
-              <div className="bg-blue-50 border-2 border-blue-200 rounded-lg p-4 min-w-[150px]">
-                <p className="text-sm text-blue-600 font-medium">Base Classifiers</p>
-                <p className="text-2xl font-bold text-blue-700">4</p>
-                <p className="text-xs text-gray-500">RF, XGB, LGB, KNN</p>
-              </div>
-              <span className="text-3xl text-gray-400">→</span>
-              <div className="bg-purple-50 border-2 border-purple-200 rounded-lg p-4 min-w-[150px]">
-                <p className="text-sm text-purple-600 font-medium">Meta-Learner</p>
-                <p className="text-2xl font-bold text-purple-700">1</p>
-                <p className="text-xs text-gray-500">XGBoost Stacker</p>
-              </div>
-              <span className="text-3xl text-gray-400">→</span>
-              <div className="bg-green-50 border-2 border-green-200 rounded-lg p-4 min-w-[150px]">
-                <p className="text-sm text-green-600 font-medium">Final Prediction</p>
-                <p className="text-2xl font-bold text-green-700">22</p>
-                <p className="text-xs text-gray-500">Crop Classes</p>
+          <div className="mt-8 pt-8 border-t border-stone-200 flex flex-col items-center justify-center gap-2">
+            <div className="bg-emerald-50 border border-emerald-100 rounded-lg p-3 flex items-center gap-3">
+              <div className="w-8 h-8 rounded-full bg-emerald-100 flex items-center justify-center text-lg">🌧️</div>
+              <div className="text-left">
+                <p className="text-xs text-emerald-600 font-bold uppercase">Input Augmentation</p>
+                <p className="text-sm font-bold text-emerald-800">Humidity & Rainfall Forecasters</p>
               </div>
             </div>
-            <div className="mt-4 pt-4 border-t border-gray-200 flex items-center justify-center gap-4">
-              <div className="bg-teal-50 border-2 border-teal-200 rounded-lg p-3">
-                <p className="text-xs text-teal-600 font-medium">Forecasters</p>
-                <p className="text-sm font-bold text-teal-700">Humidity & Rainfall</p>
-              </div>
-              <span className="text-gray-400">feeding into classifiers</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Models Grid */}
-        <div className="grid gap-6">
-          {models.map((model) => (
-            <div key={model.shortName} className="card hover:shadow-lg transition-shadow">
-              <div className="flex flex-col md:flex-row md:items-start gap-4">
-                {/* Icon and Title */}
-                <div className="flex-shrink-0">
-                  <div className="w-16 h-16 bg-gradient-to-br from-gray-100 to-gray-200 rounded-xl flex items-center justify-center text-3xl">
-                    {model.icon}
-                  </div>
-                </div>
-
-                {/* Content */}
-                <div className="flex-1">
-                  <div className="flex flex-wrap items-center gap-2 mb-2">
-                    <h3 className="text-xl font-bold text-gray-800">{model.name}</h3>
-                    <span className={`px-2 py-0.5 rounded-full text-xs font-medium ${getCategoryColor(model.category)}`}>
-                      {model.category}
-                    </span>
-                    <code className="px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">{model.shortName}</code>
-                  </div>
-
-                  <p className="text-gray-600 mb-4">{model.description}</p>
-
-                  {/* Parameters Table */}
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-sm">
-                      <thead>
-                        <tr className="border-b border-gray-200">
-                          <th className="text-left py-2 px-3 font-semibold text-gray-700 bg-gray-50 rounded-tl-lg">
-                            Parameter
-                          </th>
-                          <th className="text-left py-2 px-3 font-semibold text-gray-700 bg-gray-50">Value</th>
-                          <th className="text-left py-2 px-3 font-semibold text-gray-700 bg-gray-50 rounded-tr-lg">
-                            Description
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {model.parameters.map((param, idx) => (
-                          <tr
-                            key={param.name}
-                            className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}
-                          >
-                            <td className="py-2 px-3 font-mono text-blue-600">{param.name}</td>
-                            <td className="py-2 px-3 font-mono text-green-600">{param.value}</td>
-                            <td className="py-2 px-3 text-gray-600">{param.description}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Cross-Validation Note */}
-        <div className="mt-8 card bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-200">
-          <div className="flex items-start gap-3">
-            <span className="text-2xl">📊</span>
-            <div>
-              <h3 className="font-bold text-amber-800 mb-1">Training Methodology</h3>
-              <p className="text-amber-700 text-sm">
-                Base classifiers are trained using <strong>5-fold Stratified Cross-Validation</strong> with{' '}
-                <code className="bg-amber-100 px-1 rounded">random_state=42</code>. Out-of-fold predictions are used as
-                meta-features for the stacker, ensuring no data leakage during the stacking process.
-              </p>
-            </div>
+            <p className="text-xs text-stone-400">7-day forecast data injected as features</p>
           </div>
         </div>
       </div>
+
+      {/* Models Grid */}
+      <div className="grid gap-6">
+        {models.map((model) => (
+          <div key={model.shortName} className="card hover:border-green-300/50 transition-colors">
+            <div className="flex flex-col md:flex-row md:items-start gap-6">
+              {/* Icon and Title */}
+              <div className="shrink-0">
+                <div className="w-16 h-16 bg-stone-50 rounded-2xl flex items-center justify-center text-3xl shadow-inner border border-stone-100">
+                  {model.icon}
+                </div>
+              </div>
+
+              {/* Content */}
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center gap-3 mb-3">
+                  <h3 className="text-xl font-bold text-stone-800">{model.name}</h3>
+                  <span className={`px-2.5 py-0.5 rounded-full text-xs font-semibold uppercase tracking-wide ${getCategoryColor(model.category)}`}>
+                    {model.category}
+                  </span>
+                  <code className="px-2 py-0.5 bg-stone-100 text-stone-500 rounded text-xs font-mono border border-stone-200">{model.shortName}</code>
+                </div>
+
+                <p className="text-stone-600 mb-6 leading-relaxed">{model.description}</p>
+
+                {/* Parameters Table */}
+                <div className="overflow-hidden rounded-xl border border-stone-200">
+                  <table className="w-full text-sm">
+                    <thead>
+                      <tr className="bg-stone-50 border-b border-stone-200">
+                        <th className="text-left py-2.5 px-4 font-semibold text-stone-700">Parameter</th>
+                        <th className="text-left py-2.5 px-4 font-semibold text-stone-700">Value</th>
+                        <th className="text-left py-2.5 px-4 font-semibold text-stone-700">Description</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-stone-100">
+                      {model.parameters.map((param, idx) => (
+                        <tr
+                          key={param.name}
+                          className={idx % 2 === 0 ? 'bg-white' : 'bg-stone-50/30'}
+                        >
+                          <td className="py-2.5 px-4 font-mono text-sky-700 font-medium">{param.name}</td>
+                          <td className="py-2.5 px-4 font-mono text-emerald-700">{param.value}</td>
+                          <td className="py-2.5 px-4 text-stone-500">{param.description}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Cross-Validation Note */}
+      <div className="mt-12 p-6 bg-amber-50 border border-amber-100 rounded-2xl flex items-start gap-4">
+        <span className="text-2xl mt-1">⚠️</span>
+        <div>
+          <h3 className="font-bold text-amber-900 mb-1">Rigorous Validation Strategy</h3>
+          <p className="text-amber-800/80 text-sm leading-relaxed">
+            Base classifiers are trained using <strong>5-fold Stratified Cross-Validation</strong> with{' '}
+            <code className="bg-amber-100 px-1.5 py-0.5 rounded text-amber-900 border border-amber-200 text-xs">random_state=42</code>. 
+            Crucially, out-of-fold predictions are used as meta-features for the stacker to prevent data leakage.
+          </p>
+        </div>
+      </div>
+    </div>
   );
 }

@@ -2,17 +2,17 @@ import { useState, useEffect } from 'react';
 import { predictCrop, healthCheck, type CropInput, type PredictionResponse } from '../api';
 
 const defaultInput: CropInput = {
-  nitrogen: 50,
-  phosphorus: 50,
-  potassium: 50,
-  temperature: 25,
-  humidity: 65,
+  nitrogen: 90,
+  phosphorus: 42,
+  potassium: 43,
+  temperature: 20,
+  humidity: 82,
   ph: 6.5,
-  rainfall: 100,
-  humidity_forecast: 65,
-  rainfall_forecast: 80,
+  rainfall: 200,
+  humidity_forecast: 80,
+  rainfall_forecast: 150,
 };
-
+// 90,42,43,20.87974371,82.00274423,6.502985292000001,202.9355362,rice
 export default function HomePage() {
   const [input, setInput] = useState<CropInput>(defaultInput);
   const [result, setResult] = useState<PredictionResponse | null>(null);
@@ -61,7 +61,7 @@ export default function HomePage() {
   }) => (
     <div>
       <label className="input-label">
-        {label} {unit && <span className="text-gray-400 font-normal">({unit})</span>}
+        {label} {unit && <span className="text-stone-400 font-normal">({unit})</span>}
       </label>
       <input
         type="number"
@@ -75,12 +75,6 @@ export default function HomePage() {
     </div>
   );
 
-  const getRiskColor = (risk: number) => {
-    if (risk < 0.3) return 'text-green-600 bg-green-50';
-    if (risk < 0.6) return 'text-yellow-600 bg-yellow-50';
-    return 'text-red-600 bg-red-50';
-  };
-
   const getRiskLabel = (risk: number) => {
     if (risk < 0.3) return 'Low';
     if (risk < 0.6) return 'Medium';
@@ -91,35 +85,38 @@ export default function HomePage() {
     <>
       {/* Header */}
       <div className="text-center mb-10">
-        <div className="flex items-center justify-center gap-3 mb-4">
-          <span className="text-5xl">🌱</span>
-          <h1 className="text-4xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 bg-clip-text text-transparent">
-            Crop Guidance System
-          </h1>
-        </div>
-        <p className="text-gray-600 text-lg">
-          AI-powered crop recommendations using ensemble machine learning & weather forecasts
+        <h1 className="text-4xl sm:text-5xl font-bold text-stone-800 mb-4 tracking-tight">
+          Find the Perfect Crop
+        </h1>
+        <p className="text-stone-600 text-lg max-w-2xl mx-auto leading-relaxed">
+          Leverage our ensemble machine learning models and weather forecasts to optimize your harvest.
         </p>
-        <div className="mt-4 flex items-center justify-center gap-2">
+        
+        <div className="mt-6 flex items-center justify-center gap-2">
           <span
-            className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${
+            className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
               apiStatus === 'online'
-                ? 'bg-green-100 text-green-700'
+                ? 'bg-green-50 text-green-700 ring-1 ring-green-200/50'
                 : apiStatus === 'offline'
-                ? 'bg-red-100 text-red-700'
-                : 'bg-gray-100 text-gray-700'
+                ? 'bg-red-50 text-red-700 ring-1 ring-red-200/50'
+                : 'bg-stone-100 text-stone-600'
             }`}
           >
-            <span
-              className={`w-2 h-2 rounded-full ${
-                apiStatus === 'online'
-                  ? 'bg-green-500'
-                  : apiStatus === 'offline'
-                  ? 'bg-red-500'
-                  : 'bg-gray-400 animate-pulse'
-              }`}
-            />
-            API {apiStatus === 'checking' ? 'Connecting...' : apiStatus}
+            <span className="relative flex h-2.5 w-2.5">
+              {apiStatus === 'online' && (
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              )}
+              <span
+                className={`relative inline-flex rounded-full h-2.5 w-2.5 ${
+                  apiStatus === 'online'
+                    ? 'bg-green-500'
+                    : apiStatus === 'offline'
+                    ? 'bg-red-500'
+                    : 'bg-stone-400'
+                }`}
+              />
+            </span>
+            System {apiStatus === 'checking' ? 'Connecting...' : apiStatus === 'online' ? 'Operational' : 'Offline'}
           </span>
         </div>
       </div>
@@ -128,9 +125,10 @@ export default function HomePage() {
         {/* Input Cards */}
         <div className="grid md:grid-cols-3 gap-6 mb-8">
           {/* Soil Nutrients */}
-          <div className="card">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <span className="text-2xl">🧪</span> Soil Nutrients
+          <div className="card border-t-4 border-t-amber-500">
+            <h2 className="text-lg font-bold text-stone-800 mb-5 flex items-center gap-2">
+              <span className="text-xl w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">🧪</span> 
+              Soil Nutrients
             </h2>
             <div className="space-y-4">
               <InputField label="Nitrogen" field="nitrogen" min={0} max={200} unit="N" />
@@ -140,9 +138,10 @@ export default function HomePage() {
           </div>
 
           {/* Environmental */}
-          <div className="card">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <span className="text-2xl">🌡️</span> Environment
+          <div className="card border-t-4 border-t-green-500">
+            <h2 className="text-lg font-bold text-stone-800 mb-5 flex items-center gap-2">
+              <span className="text-xl w-8 h-8 rounded-lg bg-green-100 flex items-center justify-center">🌡️</span> 
+              Environment
             </h2>
             <div className="space-y-4">
               <InputField label="Temperature" field="temperature" min={0} max={50} step={0.1} unit="°C" />
@@ -152,51 +151,54 @@ export default function HomePage() {
           </div>
 
           {/* Weather */}
-          <div className="card">
-            <h2 className="text-lg font-semibold text-gray-800 mb-4 flex items-center gap-2">
-              <span className="text-2xl">🌧️</span> Weather
+          <div className="card border-t-4 border-t-sky-500">
+            <h2 className="text-lg font-bold text-stone-800 mb-5 flex items-center gap-2">
+              <span className="text-xl w-8 h-8 rounded-lg bg-sky-100 flex items-center justify-center">🌧️</span> 
+              Weather Forecast
             </h2>
             <div className="space-y-4">
               <InputField label="Rainfall" field="rainfall" min={0} max={500} step={0.1} unit="mm" />
-              <InputField label="Humidity Forecast" field="humidity_forecast" min={0} max={100} step={0.1} unit="7d %" />
-              <InputField label="Rainfall Forecast" field="rainfall_forecast" min={0} max={500} step={0.1} unit="7d mm" />
+              <InputField label="Humidity (7d)" field="humidity_forecast" min={0} max={100} step={0.1} unit="%" />
+              <InputField label="Rainfall (7d)" field="rainfall_forecast" min={0} max={500} step={0.1} unit="mm" />
             </div>
           </div>
         </div>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          className="btn-primary flex items-center justify-center gap-2"
-          disabled={loading || apiStatus === 'offline'}
-        >
-          {loading ? (
-            <>
-              <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
-                <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                />
-              </svg>
-              Analyzing...
-            </>
-          ) : (
-            <>
-              <span className="text-xl">🔍</span>
-              Get Crop Recommendations
-            </>
-          )}
-        </button>
+        <div className="max-w-md mx-auto">
+          <button
+            type="submit"
+            className="btn-primary text-lg shadow-lg shadow-green-200 hover:shadow-green-300"
+            disabled={loading || apiStatus === 'offline'}
+          >
+            {loading ? (
+              <>
+                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
+                  <path
+                    className="opacity-75"
+                    fill="currentColor"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                  />
+                </svg>
+                Processing Analysis...
+              </>
+            ) : (
+              <>
+                <span>🔍</span>
+                Generate Recommendation
+              </>
+            )}
+          </button>
+        </div>
       </form>
 
       {/* Error */}
       {error && (
-        <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 flex items-center gap-3">
+        <div className="mt-8 p-4 bg-red-50 border border-red-200 rounded-xl text-red-700 flex items-center gap-3 max-w-2xl mx-auto animate-fade-in">
           <span className="text-2xl">⚠️</span>
           <div>
-            <p className="font-medium">Error</p>
+            <p className="font-bold">Analysis Failed</p>
             <p className="text-sm">{error}</p>
           </div>
         </div>
@@ -204,56 +206,81 @@ export default function HomePage() {
 
       {/* Results */}
       {result && (
-        <div className="mt-8 card">
-          <h2 className="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
-            <span className="text-2xl">🎯</span> Recommendations
-          </h2>
-
-          {/* Pest Risk */}
-          <div className="mb-6">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-gray-600">Pest Risk Index</span>
-              <span className={`px-3 py-1 rounded-full text-sm font-semibold ${getRiskColor(result.pest_risk_index)}`}>
-                {getRiskLabel(result.pest_risk_index)} ({(result.pest_risk_index * 100).toFixed(1)}%)
-              </span>
+        <div className="mt-12 card border-t-4 border-t-emerald-500 animate-fade-in">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-8 border-b border-stone-200 pb-6">
+            <div>
+              <h2 className="text-2xl font-bold text-stone-800 flex items-center gap-3">
+                <span className="text-3xl">🎯</span> Optimal Crops Found
+              </h2>
+              <p className="text-stone-500 mt-1">Based on soil composition and weather patterns</p>
             </div>
-            <div className="w-full bg-gray-200 rounded-full h-2">
-              <div
-                className={`h-2 rounded-full transition-all duration-500 ${
-                  result.pest_risk_index < 0.3 ? 'bg-green-500' : result.pest_risk_index < 0.6 ? 'bg-yellow-500' : 'bg-red-500'
-                }`}
-                style={{ width: `${result.pest_risk_index * 100}%` }}
-              />
+            
+            {/* Pest Risk Badge */}
+            <div className="flex flex-col items-end">
+               <div className={`px-4 py-2 rounded-xl flex items-center gap-3 ${
+                 result.pest_risk_index < 0.3 ? 'bg-green-50 border border-green-200' : 
+                 result.pest_risk_index < 0.6 ? 'bg-amber-50 border border-amber-200' : 'bg-red-50 border border-red-200'
+               }`}>
+                 <div className="text-right">
+                   <p className="text-xs font-semibold uppercase tracking-wider opacity-70">Pest Risk Index</p>
+                   <p className={`font-bold text-lg leading-none ${
+                     result.pest_risk_index < 0.3 ? 'text-green-700' : 
+                     result.pest_risk_index < 0.6 ? 'text-amber-700' : 'text-red-700'
+                   }`}>
+                     {getRiskLabel(result.pest_risk_index)}
+                   </p>
+                 </div>
+                 <div className="w-12 h-12 relative flex items-center justify-center">
+                    <svg className="w-full h-full transform -rotate-90">
+                      <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-black/5" />
+                      <circle cx="24" cy="24" r="20" stroke="currentColor" strokeWidth="4" fill="transparent" 
+                        strokeDasharray={125.6} 
+                        strokeDashoffset={125.6 * (1 - result.pest_risk_index)}
+                        className={result.pest_risk_index < 0.3 ? 'text-green-500' : result.pest_risk_index < 0.6 ? 'text-amber-500' : 'text-red-500'} 
+                      />
+                    </svg>
+                 </div>
+               </div>
             </div>
           </div>
 
-          {/* Crops */}
-          <div className="space-y-4">
+          {/* Crops List */}
+          <div className="grid gap-4">
             {result.recommendations.map((rec, index) => (
               <div
                 key={rec.crop}
-                className={`flex items-center gap-4 p-4 rounded-xl transition-all duration-300 ${
-                  index === 0 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-2 border-green-200' : 'bg-gray-50'
+                className={`relative overflow-hidden flex items-center gap-5 p-5 rounded-2xl transition-all duration-300 group hover:shadow-md ${
+                  index === 0 
+                    ? 'bg-linear-to-r from-emerald-50 to-green-50 border border-emerald-200 shadow-sm' 
+                    : 'bg-white border border-stone-100'
                 }`}
               >
                 <div
-                  className={`flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center text-xl font-bold ${
-                    index === 0 ? 'bg-green-500 text-white' : index === 1 ? 'bg-gray-300 text-gray-700' : 'bg-amber-200 text-amber-800'
+                  className={`shrink-0 w-14 h-14 rounded-2xl flex items-center justify-center text-2xl font-bold shadow-sm ${
+                    index === 0 ? 'bg-emerald-500 text-white' : 'bg-stone-100 text-stone-600'
                   }`}
                 >
                   {index + 1}
                 </div>
-                <div className="flex-1">
-                  <h3 className={`font-semibold capitalize ${index === 0 ? 'text-lg text-green-700' : 'text-gray-700'}`}>
+                
+                <div className="flex-1 z-10">
+                  <h3 className={`font-bold text-xl capitalize mb-1 ${index === 0 ? 'text-emerald-900' : 'text-stone-700'}`}>
                     {rec.crop}
                   </h3>
-                  <p className="text-sm text-gray-500">Confidence Score</p>
+                  <div className="flex items-center gap-2">
+                    <div className="flex-1 h-2 bg-stone-200 rounded-full max-w-[200px] overflow-hidden">
+                      <div 
+                        className={`h-full rounded-full ${index === 0 ? 'bg-emerald-500' : 'bg-stone-400'}`} 
+                        style={{ width: `${rec.confidence * 100}%` }}
+                      />
+                    </div>
+                    <span className="text-sm font-medium text-stone-500">{(rec.confidence * 100).toFixed(1)}% Match</span>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <span className={`text-2xl font-bold ${index === 0 ? 'text-green-600' : 'text-gray-600'}`}>
-                    {(rec.confidence * 100).toFixed(1)}%
-                  </span>
-                </div>
+
+                {index === 0 && (
+                  <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-emerald-100/50 to-transparent pointer-events-none" />
+                )}
               </div>
             ))}
           </div>
